@@ -8,6 +8,7 @@ public class FullName implements Comparable<FullName> {
 
     // attributes
     private String firstName;
+    private String middleName = "";
     private String lastName;
 
     enum SortOrder{FORWARD, REVERSE}
@@ -29,10 +30,19 @@ public class FullName implements Comparable<FullName> {
             "Smith", "Taylor"};
         randomIndex = (int) (Math.random() * lastNames.length);
         lastName = lastNames[randomIndex];
+        // Choose a random middle name from a list of 20 possibilities
+        String[] middleNames = {"Anne", "Beth", "Catherine", "Diane", "Elizabeth",
+            "Frances", "Grace", "Helen", "Irene", "Jane", "Katherine", "Louise",
+            "Marie", "Nancy", "Olivia", "Patricia", "Quinn", "Rose", "Samantha",
+            "Theresa"};
+        randomIndex = (int) (Math.random() * middleNames.length);
+        middleName = middleNames[randomIndex];
+
     }
 
-    public FullName(String firstName, String lastName) {
+    public FullName(String firstName, String middleName, String lastName) {
         this.firstName = firstName;
+        this.middleName = middleName;
         this.lastName = lastName;
     }
 
@@ -61,8 +71,20 @@ public class FullName implements Comparable<FullName> {
         }
     }
 
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        // We can do some validation here to make sure that the middle name
+        // is not null or empty
+        if (middleName != null && !middleName.isEmpty()) {
+            this.middleName = middleName;
+        }
+    }
+
     public String toString() {
-        return firstName + " " + lastName;
+        return firstName + " " + middleName + " " +  lastName;
     }
 
     // This is the method that we need to implement from the Comparable
@@ -80,6 +102,9 @@ public class FullName implements Comparable<FullName> {
         // If the last names are the same, we can compare the first names
         if (result == 0) {
             result = firstName.compareTo(other.firstName);
+            if (result == 0) {
+                result = middleName.compareTo(other.middleName);
+            }
         }
         if (sortOrder == SortOrder.REVERSE) {
             result = -result;
